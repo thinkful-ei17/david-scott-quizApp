@@ -1,139 +1,106 @@
 // views: start, questions, feedback, lastQuestionFeedback, results
 
+'use strict';
+
 const QUESTIONS = [
-    {question: 'What is 2+2?',
+  {question: 'What is 2+2?',
     answers: [1, 2, 3, 4],
     correctAnswer: QUESTIONS[0].answers[3]},
-    {question: 'What is 3-2?',
+  {question: 'What is 3-2?',
     answers: [-10, 2, 1, 32],
     correctAnswer: QUESTIONS[1].answers[2]},
-    {question: 'What is 1x1?',
+  {question: 'What is 1x1?',
     answers: [1, 0, 100, 11],
-    correctAnswer: QUESTION[2].answers[0]},
-    {question: 'What is 25/5?',
+    correctAnswer: QUESTIONS[2].answers[0]},
+  {question: 'What is 25/5?',
     answers: [125, 2, 5, 50],
-    correctAnswer: QUESTION[3].answers[2]},
-    {question: 'What is 6^2?',
+    correctAnswer: QUESTIONS[3].answers[2]},
+  {question: 'What is 6^2?',
     answers: [36, 12, 6, 90],
-    correctAnswer: QUESTION[4].answers[0]}
+    correctAnswer: QUESTIONS[4].answers[0]}
 ];
 
-const STORE {
-    view: start,
-    title: start,
-    currentQuestion: null,
-    currentScore: null,
-    button: start,
-    showFeedback: false,
-}
+const store = {
+  view: 'start',
+  currentQuestion: null,
+  currentScore: null,
+  button: 'start',
+  showFeedback: false,
+};
 
-initial question STORE {
-    view: questions,
-    title: null,
-    currentQuestion: question[i],
-    currentScore: fn() {
-        correct / total;
-    },
-    button: submit,
-    showFeedback: false
-}
+// initial question STORE {
+//     view: questions,
+//     title: null,
+//     currentQuestion: question[i],
+//     currentScore: fn() {
+//         correct / total;
+//     },
+//     button: submit,
+//     showFeedback: false
+// }
 
-feedback STORE {
-    view: feedback,
-    title: null,
-    currentQuestion: question[i],
-    currentScore: fn() {
-        correct / total;
-    },
-    button: next question,
-    showFeedback: true,
-}
+// feedback STORE {
+//     view: feedback,
+//     title: null,
+//     currentQuestion: question[i],
+//     currentScore: fn() {
+//         correct / total;
+//     },
+//     button: next question,
+//     showFeedback: true,
+// }
 
-lastQuestion feedback STORE {
-    view: lastQuestionFeedback,
-    title: null,
-    currentQuestion: question[i],
-    currentScore: fn()
-    button: results,
-    showFeedback: true,
-}
+// lastQuestion feedback STORE {
+//     view: lastQuestionFeedback,
+//     title: null,
+//     currentQuestion: question[i],
+//     currentScore: fn()
+//     button: results,
+//     showFeedback: true,
+// }
 
-results STORE {
-    view: results,
-    title: results (congrats..),
-    currentQuestion: null,
-    currentScore: fn()
-    button: start again?,
-    showFeedback: false,
-}
+// results STORE {
+//     view: results,
+//     title: results (congrats..),
+//     currentQuestion: null,
+//     currentScore: fn()
+//     button: start again?,
+//     showFeedback: false,
+// }
 
-
-
-function renderQuizPage() {
-    if (store.view === 'start') {
-        // render title
-        // render button
-        $('.title').show();
-        $('.answer-choice').hide();
-        $('.results').hide();
-        $('.current-state').hide();
-        $('.button').show();
-    } else if (store.view === 'questions') {
-        // render answer-choice
-        // render current state
-        // render button
-        $('.title').hide();
-        $('.answer-choice').show();
-        $('.results').hide();
-        $('.current-state').show();
-        $('.button').show();
-    } else if (store.view === 'feedback'){
-        $('.title').hide();
-        $('.answer-choice').show();
-        $('.results').show();
-        $('.current-state').show();
-        $('.button').show();
-    } else if (store.view === 'lastQuestionFeedback'){
-        $('.title').hide();
-        $('.answer-choice').show();
-        $('.results').show();
-        $('.current-state').show();
-        $('.button').show();
-    } else (store.view === 'results'){
-        $('.title').show();
-        $('.answer-choice').hide();
-        $('.results').show();
-        $('.current-state').hide();
-        $('.button').show();
-    }
-}
-
-function renderStart(){
-    // render title and button
-    return `
+function renderStart() {
+  // render title and button
+  return `
     <header class="title">
         <h1>Welcome to our Quiz Page</h1>
     </header>
-    <button class='button'>push me</button>`
+    <button class='start-button'>Start Quiz</button>`;
 }
 
 
-function renderQuestion(){
-    // question text
-    // answers as radio buttons
-    generateQuestion(store.currentQuestion);
+function renderQuestion() {
+  // question text
+  // answers as radio buttons
+  generateQuestion(store.currentQuestion);
+  generateButton('submit', 'submit');
 }
 
-function renderFeedback(){}
+function renderFeedback() {
+  generateQuestion(store.currentQuestion);
+  generateFeedback(store.currentQuestion);
+  generateButton('next-Question', 'Next Question');
+}
 
-function renderlastQuestionFeedback(){}
+function renderlastQuestionFeedback() {}
 
-function renderResults(){}
+function renderResults() {}
 
+function generateButton(buttonClass, text) {
+  return `<button class="${buttonClass}">${text}</button>`;
+}
 
-function genereateQuestion(i) {
-    return
-    `<div class="answer-choice">${QUESTIONS[i].question}</div>
+function generateQuestion(i) {
+  return `<div class="answer-choice">${QUESTIONS[i].question}</div>
     <input type="radio" name="choices" class="choice-1" id='choice-1'>
         <label for="choice-1">${QUESTIONS[i].answers[0]}</label>
     <input type="radio" name="choices" class="choice-2" id='choice-2'>
@@ -142,56 +109,51 @@ function genereateQuestion(i) {
         <label for="choice-3">${QUESTIONS[i].answers[2]}</label>
     <input type="radio" name="choices" class="choice-4" id='choice-4'>
         <label for="choice-4">${QUESTIONS[i].answers[3]}</label>
-    </div>`
+    </div>`;
+}
+
+function handleAnswerClicked(i) {
+  $('form').on('click', '.submit', event => {
+    if($('input[type=radio]:checked') === QUESTIONS[i].correctAnswer) {
+      return '<p>Correct!</p>';
+    } else if($('input[type=radio]:checked') !== QUESTIONS[i].correctAnswer) {
+      return '<p>Wrong!</p>';
+    }
+  });
+}
+
+function generateFeedback(i) {
+  
+  return `<div class="feedback">
+            <h2 class="result">feedback: correct/wrong</h2>
+            <h2 class="correct-answer">results: this one was right</h2>
+          </div>`;
+}
+
+function handleSubmit() {
+  $('.submit-button').submit(event => {
+    store.view = 'feedback';
+  });
 }
 
 
 function renderPage(){
-    if(store.view === 'start'){
+  if(store.view === 'start') {
     $('form').html(renderStart());
-    }
-    if(store.view === 'questions'){
-        $('form').html(renderQuestions());
-    }
-    if(store.view === 'feedback'){
-        $('form').html(renderFeedback());
-    }
-    if()
-
+  }
+  if(store.view === 'questions') {
+    $('form').html(renderQuestion());
+  }
+  if(store.view === 'feedback') {
+    $('form').html(renderFeedback());
+  }
+  if(store.view === 'lastQuestionFeedback') {
+    $('form').html(renderlastQuestionFeedback());
+  }
+  if(store.view === 'results') {
+    $('form').html(renderResults());
+  }
 }
 
-$(renderPage())
+$(renderPage());
 // make functions for each view
-
-
-
-
-// In-memory database of questions
-const QUESTIONS = [];
-
-// Create your initial store
-const STORE = {
-    // Current question
-    // User's answer choice(s)
-    // Current view
-    // Score? Anything else?
-};
-
-// Template generators
-function generateAnswerList(answers) {}
-
-// Rendering functions
-function renderQuestionText() {}
-
-// Event handlers
-function handleAnswerSubmitted() {
-  $('.user-controls').on('click', '.submit-answer', () => {
-    // Retrieve answer identifier of user-checked radio button
-    // Perform check: User answer === Correct answer?
-    // Update STORE and render appropriate section
-  });
-}
-
-$(function(){
-    handleAnswerSubmitted();
-});
