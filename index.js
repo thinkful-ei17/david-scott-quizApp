@@ -53,13 +53,40 @@ results STORE {
 
 
 
-
-
-
-
 function renderQuizPage() {
-
+    if (store.view === 'start') {
+        $('.title').show();
+        $('.answer-choice').hide();
+        $('.results').hide();
+        $('.current-state').hide();
+        $('.button').show();
+    } else if (store.view === 'questions') {
+        $('.title').hide();
+        $('.answer-choice').show();
+        $('.results').hide();
+        $('.current-state').show();
+        $('.button').show();
+    } else if (store.view === 'feedback'){
+        $('.title').hide();
+        $('.answer-choice').show();
+        $('.results').show();
+        $('.current-state').show();
+        $('.button').show();
+    } else if (store.view === 'lastQuestionFeedback'){
+        $('.title').hide();
+        $('.answer-choice').show();
+        $('.results').show();
+        $('.current-state').show();
+        $('.button').show();
+    } else (store.view === 'results'){
+        $('.title').show();
+        $('.answer-choice').hide();
+        $('.results').show();
+        $('.current-state').hide();
+        $('.button').show();
+    }
 }
+  
 
 // make functions for each view
 
