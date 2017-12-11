@@ -5,19 +5,19 @@
 const QUESTIONS = [
   {question: 'What is 2+2?',
     answers: [1, 2, 3, 4],
-    correctAnswer: QUESTIONS[0].answers[3]},
+    correctAnswer: 3},
   {question: 'What is 3-2?',
     answers: [-10, 2, 1, 32],
-    correctAnswer: QUESTIONS[1].answers[2]},
+    correctAnswer: 2},
   {question: 'What is 1x1?',
     answers: [1, 0, 100, 11],
-    correctAnswer: QUESTIONS[2].answers[0]},
+    correctAnswer: 0},
   {question: 'What is 25/5?',
     answers: [125, 2, 5, 50],
-    correctAnswer: QUESTIONS[3].answers[2]},
+    correctAnswer: 2},
   {question: 'What is 6^2?',
     answers: [36, 12, 6, 90],
-    correctAnswer: QUESTIONS[4].answers[0]}
+    correctAnswer: 0}
 ];
 
 const store = {
@@ -77,12 +77,22 @@ function renderStart() {
     <button class='start-button'>Start Quiz</button>`;
 }
 
+function handleStartButtonClick(){
+  $('form').submit(function(event){
+    event.preventDefault();
+    console.log('this should start things');
+    store.view = 'questions';
+    store.currentQuestion = 0;
+    renderPage();
+  }
+  );
+}
 
 function renderQuestion() {
   // question text
   // answers as radio buttons
-  generateQuestion(store.currentQuestion);
-  generateButton('submit', 'submit');
+  return generateQuestion(store.currentQuestion);
+  // generateButton('submit', 'submit');
 }
 
 function renderFeedback() {
@@ -99,16 +109,16 @@ function generateButton(buttonClass, text) {
   return `<button class="${buttonClass}">${text}</button>`;
 }
 
-function generateQuestion(i) {
-  return `<div class="answer-choice">${QUESTIONS[i].question}</div>
+function generateQuestion(i=0) {
+  return `<div class="answer-choice">${QUESTIONS[0].question}</div>
     <input type="radio" name="choices" class="choice-1" id='choice-1'>
-        <label for="choice-1">${QUESTIONS[i].answers[0]}</label>
+        <label for="choice-1">${QUESTIONS[0].answers[0]}</label>
     <input type="radio" name="choices" class="choice-2" id='choice-2'>
-        <label for="choice-2">${QUESTIONS[i].answers[1]}</label>
+        <label for="choice-2">${QUESTIONS[0].answers[1]}</label>
     <input type="radio" name="choices" class="choice-3" id='choice-3'>
-        <label for="choice-3">${QUESTIONS[i].answers[2]}</label>
+        <label for="choice-3">${QUESTIONS[0].answers[2]}</label>
     <input type="radio" name="choices" class="choice-4" id='choice-4'>
-        <label for="choice-4">${QUESTIONS[i].answers[3]}</label>
+        <label for="choice-4">${QUESTIONS[0].answers[3]}</label>
     </div>`;
 }
 
@@ -138,10 +148,12 @@ function handleSubmit() {
 
 
 function renderPage(){
+
   if(store.view === 'start') {
     $('form').html(renderStart());
   }
   if(store.view === 'questions') {
+    console.log('about to render')
     $('form').html(renderQuestion());
   }
   if(store.view === 'feedback') {
@@ -155,5 +167,10 @@ function renderPage(){
   }
 }
 
-$(renderPage());
+$(function(){
+  renderPage();
+  handleStartButtonClick();
+}
+);
+
 // make functions for each view
