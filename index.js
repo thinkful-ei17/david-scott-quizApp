@@ -71,12 +71,17 @@ results STORE {
 
 function renderQuizPage() {
     if (store.view === 'start') {
+        // render title
+        // render button
         $('.title').show();
         $('.answer-choice').hide();
         $('.results').hide();
         $('.current-state').hide();
         $('.button').show();
     } else if (store.view === 'questions') {
+        // render answer-choice
+        // render current state
+        // render button
         $('.title').hide();
         $('.answer-choice').show();
         $('.results').hide();
@@ -103,14 +108,31 @@ function renderQuizPage() {
     }
 }
 
-function startQuiz() {
-    // click start button
-    // change store.view to questions
-    // re render page
+function renderStart(){
+    // render title and button
+    return `
+    <header class="title">
+        <h1>Welcome to our Quiz Page</h1>
+    </header>
+    <button class='button'>push me</button>`
 }
 
+
+function renderQuestion(){
+    // question text
+    // answers as radio buttons
+    generateQuestion(store.currentQuestion);
+}
+
+function renderFeedback(){}
+
+function renderlastQuestionFeedback(){}
+
+function renderResults(){}
+
+
 function genereateQuestion(i) {
-    return $('.question').html(
+    return
     `<div class="answer-choice">${QUESTIONS[i].question}</div>
     <input type="radio" name="choices" class="choice-1" id='choice-1'>
         <label for="choice-1">${QUESTIONS[i].answers[0]}</label>
@@ -120,13 +142,25 @@ function genereateQuestion(i) {
         <label for="choice-3">${QUESTIONS[i].answers[2]}</label>
     <input type="radio" name="choices" class="choice-4" id='choice-4'>
         <label for="choice-4">${QUESTIONS[i].answers[3]}</label>
-    </div>`)
+    </div>`
 }
 
 
+function renderPage(){
+    if(store.view === 'start'){
+    $('form').html(renderStart());
+    }
+    if(store.view === 'questions'){
+        $('form').html(renderQuestions());
+    }
+    if(store.view === 'feedback'){
+        $('form').html(renderFeedback());
+    }
+    if()
 
+}
 
-
+$(renderPage())
 // make functions for each view
 
 
