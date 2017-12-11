@@ -1,6 +1,22 @@
 // views: start, questions, feedback, lastQuestionFeedback, results
 
-const QUESTIONS = [];
+const QUESTIONS = [
+    {question: 'What is 2+2?',
+    answers: [1, 2, 3, 4],
+    correctAnswer: QUESTIONS[0].answers[3]},
+    {question: 'What is 3-2?',
+    answers: [-10, 2, 1, 32],
+    correctAnswer: QUESTIONS[1].answers[2]},
+    {question: 'What is 1x1?',
+    answers: [1, 0, 100, 11],
+    correctAnswer: QUESTION[2].answers[0]},
+    {question: 'What is 25/5?',
+    answers: [125, 2, 5, 50],
+    correctAnswer: QUESTION[3].answers[2]},
+    {question: 'What is 6^2?',
+    answers: [36, 12, 6, 90],
+    correctAnswer: QUESTION[4].answers[0]}
+];
 
 const STORE {
     view: start,
@@ -86,10 +102,62 @@ function renderQuizPage() {
         $('.button').show();
     }
 }
-  
+
+function startQuiz() {
+    // click start button
+    // change store.view to questions
+    // re render page
+}
+
+function genereateQuestion(i) {
+    return $('.question').html(
+    `<div class="answer-choice">${QUESTIONS[i].question}</div>
+    <input type="radio" name="choices" class="choice-1" id='choice-1'>
+        <label for="choice-1">${QUESTIONS[i].answers[0]}</label>
+    <input type="radio" name="choices" class="choice-2" id='choice-2'>
+        <label for="choice-2">${QUESTIONS[i].answers[1]}</label>
+    <input type="radio" name="choices" class="choice-3" id='choice-3'>
+        <label for="choice-3">${QUESTIONS[i].answers[2]}</label>
+    <input type="radio" name="choices" class="choice-4" id='choice-4'>
+        <label for="choice-4">${QUESTIONS[i].answers[3]}</label>
+    </div>`)
+}
+
+
+
+
 
 // make functions for each view
 
 
 
 
+// In-memory database of questions
+const QUESTIONS = [];
+
+// Create your initial store
+const STORE = {
+    // Current question
+    // User's answer choice(s)
+    // Current view
+    // Score? Anything else?
+};
+
+// Template generators
+function generateAnswerList(answers) {}
+
+// Rendering functions
+function renderQuestionText() {}
+
+// Event handlers
+function handleAnswerSubmitted() {
+  $('.user-controls').on('click', '.submit-answer', () => {
+    // Retrieve answer identifier of user-checked radio button
+    // Perform check: User answer === Correct answer?
+    // Update STORE and render appropriate section
+  });
+}
+
+$(function(){
+    handleAnswerSubmitted();
+});
