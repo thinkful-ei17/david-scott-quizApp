@@ -107,23 +107,27 @@ function generateButton(buttonClass, text) {
 
 function handleSubmitAnswerButtonClicked() {
   //listen for the .submit-answer button click
-  $('form').on('click', '.submit-answer', function (event) {
+  $('.page').on('click', '.submit-answer', function (event) {
     //prevent the default behavior
     event.preventDefault();
     //check if the handler works
     console.log('submit answer button was clicked');
+    if(STORE.currentQuestion === QUESTIONS.length-1) {
+      STORE.button = {class: 'view-results', label: 'View Results'};
+    } else {
+      STORE.button = {class: 'next-question', label: 'Next Question'};
+      console.log(STORE);
+    }
     //change STORE.view to feedback
     STORE.view = 'feedback';
     //we don't change the STORE.currentQuestion b/c we want it to stay 
     // we change STORE.showFeedback to true
     STORE.showFeedback = true;
     // we change the STORE.button to 'next-question'
-    STORE.button = {class: 'next-question', label: 'Next Question'};
-    console.log(STORE);
     renderPage();
   });
 }
-handleSubmitAnswerButtonClicked();
+
 
 //this function returns a string that outlines the STORE.view = 'feedback' page
 function renderFeedbackView(){
@@ -158,6 +162,7 @@ function generateFeedback(i){
   }
   if (indexUserChoice == correctAnswer){
     resultMessage = "You were Correct!";
+    STORE.correctAnswerTotal++;
   }
   return `
     <div class="feedback">
@@ -165,6 +170,30 @@ function generateFeedback(i){
             <h2 class="answer-feedback" id="correct-answer">The Correct Answer was: ${QUESTIONS[i].answers[correctAnswer]}</h2>
         </div>`;
 }
+
+function handleNextQuestion() {
+  $('.page').on('click', '.next-question', function(event) {
+    STORE.currentQuestion++;
+    STORE.view = 'questions';
+    STORE.button = {class:'submit-answer', label: 'Submit Answer'};
+    renderPage();
+  });
+}
+
+function handleViewResults() {
+  //on click on button
+  //change store view to results
+  //change button to 'start over'
+  //change currentQuestion to null
+  //output score and 'congatulations....'
+}
+
+function handleStartOver() {
+  //reset STORE values to initial
+  //re render
+}
+
+
 //this will render the page to the DOM based on 
 //our current store state.
 //this will be called each time we need to change the view 
@@ -181,9 +210,9 @@ function renderPage() {
   if (STORE.view === 'feedback') {
     $('form').html(renderFeedbackView());
   }
-  if (STORE.view === 'lastQuestionFeedback') {
-    $('form').html(renderlastQuestionFeedbackView());
-  }
+  // if (STORE.view === 'lastQuestionFeedback') {
+  //   $('form').html(renderlastQuestionFeedbackView());
+  // }
   if (STORE.view === 'results') {
     $('form').html(renderResultsView());
   }
@@ -194,5 +223,7 @@ function renderPage() {
 $(function () {
   renderPage();
   handleStartButtonClick();
+  handleSubmitAnswerButtonClicked();
+  handleNextQuestion();
 }
 );
