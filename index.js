@@ -24,7 +24,7 @@ const store = {
   view: 'start',
   currentQuestion: null,
   currentScore: null,
-  button: 'start',
+  button: {class: 'start', label: "Start Quiz",
   showFeedback: false,
 };
 
@@ -74,7 +74,7 @@ function renderStart() {
     <header class="title">
         <h1>Welcome to our Quiz Page</h1>
     </header>
-    <button class='start-button'>Start Quiz</button>`;
+    <button class=${store.button.class}>${store.button.label}</button>`;
 }
 
 function handleStartButtonClick(){
