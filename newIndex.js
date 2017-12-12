@@ -33,11 +33,9 @@ const QUESTIONS = [
 const STORE = {
   view: 'start',
   currentQuestion: null,
-  currentScore: null,
   button: {class: 'start-button', label: 'Start Quiz'},
   showFeedback: false,
   correctAnswerTotal: 0,
-  curentScore: `${this.correctAnswerTotal} of 5 answers correct'`
 };
 
 
@@ -155,6 +153,16 @@ function renderFeedbackView(){
     ${question} ${feedback}`;
 }
 
+function renderResultsView(){
+  // render a title
+  //show the results
+  //make a start-over button
+  return`
+  <h1 class='result-title'>You Did It!!!!!</h1>
+  <div class='results'>You got ${STORE.correctAnswerTotal} out of ${QUESTIONS.length} right!</div>
+  <button class=${STORE.button.class}>${STORE.button.label}</button>
+  `;}
+
 // event handlers //////////////////////////////////////////////
 
 function handleStartButtonClick(){
@@ -225,9 +233,18 @@ function handleViewResults() {
   });
 }
 
+//reset STORE values to initial
+//re render
 function handleStartOver() {
-  //reset STORE values to initial
-  //re render
+  $('.page').on('click', '.start-over', function(event){
+    STORE.view = 'start';
+    STORE.currentQuestion = null;
+    STORE.button = { class: 'start-button', label: 'Start Quiz' };
+    STORE.showFeedback = false;
+    STORE.correctAnswerTotal = 0;
+    renderPage();
+  }
+  );
 }
 
 
@@ -254,5 +271,7 @@ $(function () {
   handleStartButtonClick();
   handleSubmitAnswerButtonClicked();
   handleNextQuestion();
+  handleViewResults();
+  handleStartOver();
 }
 );
