@@ -1,0 +1,49 @@
+* {
+    box-sizing: border-box;
+}
+
+.page {
+    width: 650px;
+    text-align: center;
+    border: 1px solid black;
+    margin-left: auto;
+    margin-right: auto;
+    padding-bottom: 50px;
+}
+
+h1 {
+    text-align: center;
+}
+
+.answer-choice {
+    font-size: 30px;
+    padding: 20px;
+}
+
+.current-state {
+    font-size: 14px;
+    padding: 10px;
+    padding-bottom: 0px;
+    display: inline-block;
+}
+
+label {
+    font-size: 20px;
+}
+
+.choice {
+    font-size:30px;
+}
+
+button {
+    font-size: 13px;
+    display:block;
+    margin-left: auto;
+    margin-right:auto;
+    margin-top:30px;
+}
+
+button:hover {
+    background-color: black;
+    color:white;
+}

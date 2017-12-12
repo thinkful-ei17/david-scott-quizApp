@@ -36,6 +36,7 @@ const STORE = {
   button: {class: 'start-button', label: 'Start Quiz'},
   showFeedback: false,
   correctAnswerTotal: 0,
+  userChoice: null
 };
 
 
@@ -76,13 +77,13 @@ function generateFeedback(i){
   //this is giving us the value at QUESTIONS[i]
   const correctAnswer = QUESTIONS[i].correctAnswerIndex; 
   console.log('correct answer index', correctAnswer);
-  const indexUserChoice = getAnswerResults();
-  console.log('indexUserChoice is', indexUserChoice);
+  STORE.userChoice = $('input[name=\'choice\']:checked').val();
+  console.log('indexUserChoice is', STORE.userChoice);
   let resultMessage; 
-  if(indexUserChoice !== correctAnswer){
+  if(STORE.userChoice !== correctAnswer){
     resultMessage = 'You were Wrong!';
   }
-  if (indexUserChoice == correctAnswer){
+  if (STORE.userChoice == correctAnswer){
     resultMessage = 'You were Correct!';
     STORE.correctAnswerTotal++;
   }
@@ -219,6 +220,9 @@ function handleSubmitAnswerButtonClicked() {
   });
 }
 
+if(input[type="radio"].attr('value') === STORE.userChoice)
+
+
 function handleNextQuestion() {
   $('.page').on('click', '.next-question', function(event) {
     STORE.currentQuestion++;
@@ -238,7 +242,7 @@ function handleViewResults() {
     STORE.view = 'results';
     STORE.button = {class:'start-over', label: 'Start Over'};
     STORE.currentQuestion = null;
-    
+    STORE.userChoice = null;
     renderPage();
   });
 }
@@ -256,19 +260,6 @@ function handleStartOver() {
   }
   );
 }
-
-
-
-
-function getAnswerResults(){
-  //get value for checked radio button and put into generateFeedback
-  const indexUserChoice = $('input[name=\'choice\']:checked').val();
-  console.log('radio value is', indexUserChoice);
-  return indexUserChoice;
-}
-
-
-
 
 
 
