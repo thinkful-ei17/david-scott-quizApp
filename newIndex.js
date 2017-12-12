@@ -89,13 +89,13 @@ function generateQuestion(i){
   //questionText and answers
   return `
     <div class="answer-choice">${index.questionText}</div>
-    <input type="radio" name="choice" value="${index.answers[0]}" class="choice" id="choice-1">
+    <input type="radio" name="choice" value="0" class="choice" id="choice-1">
       <label for="choice-1">${index.answers[0]}</label>
-    <input type="radio" name="choice" value="${index.answers[1]}" class="choice" id="choice-2">
+    <input type="radio" name="choice" value="1" class="choice" id="choice-2">
       <label for="choice-2">${index.answers[1]}</label>
-    <input type="radio" name="choice" value="${index.answers[2]}" class="choice" id="choice-3">
+    <input type="radio" name="choice" value="2" class="choice" id="choice-3">
       <label for="choice-3">${index.answers[2]}</label>
-    <input type="radio" name="choice" value="${index.answers[3]}" class="choice" id="choice-4">
+    <input type="radio" name="choice" value="3" class="choice" id="choice-4">
       <label for="choice-4">${index.answers[3]}</label>      
   </div>
   `;
@@ -138,7 +138,7 @@ function renderFeedbackView(){
 }
 
 function getAnswerResults(){
-  //get value for checked radio button
+  //get value for checked radio button and put into generateFeedback
   const indexUserChoice = $('input[name=\'choice\']:checked').val();
   console.log('radio value is', indexUserChoice);
   return indexUserChoice;
@@ -147,21 +147,23 @@ function getAnswerResults(){
 //this should generate a string that will be fed into renderFeedbackView
 function generateFeedback(i){
   console.log('Argument of generateFeedback', i);
-  const index = QUESTIONS[i];
-  const correctAnswer = index.correctAnswerIndex; 
-  const results = getAnswerResults();
+  //this is giving us the value at QUESTIONS[i]
+  const correctAnswer = QUESTIONS[i].correctAnswerIndex; 
+  console.log('correct answer index', correctAnswer);
+  const indexUserChoice = getAnswerResults();
+  console.log('indexUserChoice is', indexUserChoice);
   let resultMessage; 
-  if(results !== correctAnswer){
-    resultMessage = "You were Wrong!";
-  }
-  if(results === correctAnswer){
+  // if(indexUserChoice !== correctAnswer){
+  //   resultMessage = "You were Wrong!";
+  // }
+  if (indexUserChoice == correctAnswer){
     resultMessage = "You were Correct!";
   }
   
   return `
     <div class="feedback">
             <h2 class="answer-feedback" id="user-answer">results: ${resultMessage}</h2>
-            <h2 class="answer-feedback" id="correct-answer">The Correct Answer was: ${correctAnswer}</h2>
+            <h2 class="answer-feedback" id="correct-answer">The Correct Answer was: ${QUESTIONS[i].answers[correctAnswer]}</h2>
         </div>`;
 }
 //this will render the page to the DOM based on 
