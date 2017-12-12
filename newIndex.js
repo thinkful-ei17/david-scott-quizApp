@@ -146,14 +146,15 @@ function renderQuestionView(){
 //this function returns a string that outlines the STORE.view = 'feedback' page
 function renderFeedbackView(){
   //this will get the question block
-  const question = generateQuestion(STORE.currentQuestion);
+  // const question = generateQuestion(STORE.currentQuestion);
   //this will get the feedback block
   const feedback = generateFeedback(STORE.currentQuestion);
+  const button = generateButton(STORE.button.class, STORE.button.label);
   //this will get a next question button
   // const button = generateButton(STORE.button.class, STORE.button.label);
   const currentState = renderCurrentState();
   return `
-    ${question} ${feedback} ${currentState}`;
+    ${feedback} ${button} ${currentState}`;
 }
 
 function renderResultsView(){
@@ -220,7 +221,7 @@ function handleSubmitAnswerButtonClicked() {
   });
 }
 
-if(input[type="radio"].attr('value') === STORE.userChoice)
+// if(input[type="radio"].attr('value') === STORE.userChoice)
 
 
 function handleNextQuestion() {
