@@ -88,7 +88,7 @@ function generateFeedback(i){
   }
   return `
     <div class="feedback">
-            <h2 class="answer-feedback" id="user-answer">results: ${resultMessage}</h2>
+            <h2 class="answer-feedback" id="user-answer">${resultMessage}</h2>
             <h2 class="answer-feedback" id="correct-answer">The Correct Answer was: ${QUESTIONS[i].answers[correctAnswer]}</h2>
         </div>`;
 }
@@ -109,7 +109,7 @@ function renderPage() {
     console.log('about to render');
     $('form').html(renderQuestionView());
   }
-  if (STORE.view === 'feedback') {
+  if (STORE.view === 'feedback' && STORE.showFeedback === true) {
     $('form').html(renderFeedbackView());
   }
   // if (STORE.view === 'lastQuestionFeedback') {
@@ -125,7 +125,7 @@ function renderStartView() {
   // render title and button
   return `
     <header class="title">
-        <h1>Welcome to our Quiz Page</h1>
+        <h1>Welcome to our Very Very Basic Math Quiz</h1>
     </header>
     <button class=${STORE.button.class}>${STORE.button.label}</button>
     `;
@@ -136,9 +136,10 @@ function renderStartView() {
 function renderQuestionView(){
   //render the current question
   const question = generateQuestion(STORE.currentQuestion);
+  const currentState = renderCurrentState();
   //render a submit button
   // const button = generateButton(STORE.button.class, STORE.button.label);
-  return `${question}`;
+  return `${question} ${currentState}`;
 }
 
 //this function returns a string that outlines the STORE.view = 'feedback' page
@@ -149,25 +150,34 @@ function renderFeedbackView(){
   const feedback = generateFeedback(STORE.currentQuestion);
   //this will get a next question button
   // const button = generateButton(STORE.button.class, STORE.button.label);
+  const currentState = renderCurrentState();
   return `
-    ${question} ${feedback}`;
+    ${question} ${feedback} ${currentState}`;
 }
 
 function renderResultsView(){
   // render a title
   //show the results
   //make a start-over button
-  return`
+  return `
   <h1 class='result-title'>You Did It!!!!!</h1>
   <div class='results'>You got ${STORE.correctAnswerTotal} out of ${QUESTIONS.length} right!</div>
   <button class=${STORE.button.class}>${STORE.button.label}</button>
   `;}
 
+function renderCurrentState() {
+  return `
+  <div class="current-state">
+  <p class="current-question">Question: ${STORE.currentQuestion + 1} out of ${QUESTIONS.length}</p>
+  <p class="current-score">Score: ${STORE.correctAnswerTotal} out of ${QUESTIONS.length}</p>
+  </div>`;
+}
+
 // event handlers //////////////////////////////////////////////
 
 function handleStartButtonClick(){
 // this will set-up event handler for original button
-  $('.start-button').click(function(event) {
+  $('.page').on('click', '.start-button', function(event) {
     // we need to prevent the default behavior of a submit
     event.preventDefault();
     // we'll check if the event handler works
@@ -238,8 +248,8 @@ function handleViewResults() {
 function handleStartOver() {
   $('.page').on('click', '.start-over', function(event){
     STORE.view = 'start';
-    STORE.currentQuestion = null;
-    STORE.button = { class: 'start-button', label: 'Start Quiz' };
+    STORE.currentQuestion = 0;
+    STORE.button = {class: 'start-button', label: 'Start Quiz' };
     STORE.showFeedback = false;
     STORE.correctAnswerTotal = 0;
     renderPage();
