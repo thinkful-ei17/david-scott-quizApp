@@ -40,6 +40,89 @@ const STORE = {
   curentScore: `${this.correctAnswerTotal} of 5 answers correct'`
 };
 
+
+
+// template /////////////////////////////////////////////////////
+
+function generateQuestion(i){
+  //this pulls out the object at QUESTIONS at index i
+  const index = QUESTIONS[i];
+  console.log('QUESTIONS[i] =', index);
+  //this is going to return a string with html markers with auto-filled
+  //questionText and answers
+  return `
+    <form>
+    <div class="answer-choice">${index.questionText}</div>
+    <input type="radio" name="choice" value="0" class="choice" id="choice-1" required>
+      <label for="choice-1">${index.answers[0]}</label>
+    <input type="radio" name="choice" value="1" class="choice" id="choice-2" required>
+      <label for="choice-2">${index.answers[1]}</label>
+    <input type="radio" name="choice" value="2" class="choice" id="choice-3" required>
+      <label for="choice-3">${index.answers[2]}</label>
+    <input type="radio" name="choice" value="3" class="choice" id="choice-4" required>
+      <label for="choice-4">${index.answers[3]}</label>      
+  </div>
+  ${generateButton(STORE.button.class, STORE.button.label)}
+  </form>
+  `;
+}
+
+//this creates a button with a specific class and text
+function generateButton(buttonClass, text) {
+  return `<button class="${buttonClass}">${text}</button>`;
+}
+
+//this should generate a string that will be fed into renderFeedbackView
+function generateFeedback(i){
+  console.log('Argument of generateFeedback', i);
+  //this is giving us the value at QUESTIONS[i]
+  const correctAnswer = QUESTIONS[i].correctAnswerIndex; 
+  console.log('correct answer index', correctAnswer);
+  const indexUserChoice = getAnswerResults();
+  console.log('indexUserChoice is', indexUserChoice);
+  let resultMessage; 
+  if(indexUserChoice !== correctAnswer){
+    resultMessage = 'You were Wrong!';
+  }
+  if (indexUserChoice == correctAnswer){
+    resultMessage = 'You were Correct!';
+    STORE.correctAnswerTotal++;
+  }
+  return `
+    <div class="feedback">
+            <h2 class="answer-feedback" id="user-answer">results: ${resultMessage}</h2>
+            <h2 class="answer-feedback" id="correct-answer">The Correct Answer was: ${QUESTIONS[i].answers[correctAnswer]}</h2>
+        </div>`;
+}
+
+
+// render //////////////////////////////////////////////////
+
+//this will render the page to the DOM based on 
+//our current store state.
+//this will be called each time we need to change the view 
+//of the page
+function renderPage() {
+  
+  if (STORE.view === 'start') {
+    $('form').html(renderStartView());
+  }
+  if (STORE.view === 'questions') {
+    console.log('about to render');
+    $('form').html(renderQuestionView());
+  }
+  if (STORE.view === 'feedback') {
+    $('form').html(renderFeedbackView());
+  }
+  // if (STORE.view === 'lastQuestionFeedback') {
+  //   $('form').html(renderlastQuestionFeedbackView());
+  // }
+  if (STORE.view === 'results') {
+    $('form').html(renderResultsView());
+  }
+}
+  
+
 function renderStartView() {
   // render title and button
   return `
@@ -49,6 +132,30 @@ function renderStartView() {
     <button class=${STORE.button.class}>${STORE.button.label}</button>
     `;
 }
+
+//this function will return a string that outlines the 
+//STORE.view = 'questions' page
+function renderQuestionView(){
+  //render the current question
+  const question = generateQuestion(STORE.currentQuestion);
+  //render a submit button
+  // const button = generateButton(STORE.button.class, STORE.button.label);
+  return `${question}`;
+}
+
+//this function returns a string that outlines the STORE.view = 'feedback' page
+function renderFeedbackView(){
+  //this will get the question block
+  const question = generateQuestion(STORE.currentQuestion);
+  //this will get the feedback block
+  const feedback = generateFeedback(STORE.currentQuestion);
+  //this will get a next question button
+  // const button = generateButton(STORE.button.class, STORE.button.label);
+  return `
+    ${question} ${feedback}`;
+}
+
+// event handlers //////////////////////////////////////////////
 
 function handleStartButtonClick(){
 // this will set-up event handler for original button
@@ -71,43 +178,9 @@ function handleStartButtonClick(){
   );
 }
 
-//this function will return a string that outlines the 
-//STORE.view = 'questions' page
-function renderQuestionView(){
-  //render the current question
-  const question = generateQuestion(STORE.currentQuestion);
-  //render a submit button
-  const button = generateButton(STORE.button.class, STORE.button.label);
-  return `${question} ${button}`;
-}
-
-function generateQuestion(i){
-  //this pulls out the object at QUESTIONS at index i
-  const index = QUESTIONS[i];
-  console.log('QUESTIONS[i] =', index);
-  //this is going to return a string with html markers with auto-filled
-  //questionText and answers
-  return `
-    <div class="answer-choice">${index.questionText}</div>
-    <input type="radio" name="choice" value="0" class="choice" id="choice-1" required>
-      <label for="choice-1">${index.answers[0]}</label>
-    <input type="radio" name="choice" value="1" class="choice" id="choice-2" required>
-      <label for="choice-2">${index.answers[1]}</label>
-    <input type="radio" name="choice" value="2" class="choice" id="choice-3" required>
-      <label for="choice-3">${index.answers[2]}</label>
-    <input type="radio" name="choice" value="3" class="choice" id="choice-4" required>
-      <label for="choice-4">${index.answers[3]}</label>      
-  </div>
-  `;
-}
-//this creates a button with a specific class and text
-function generateButton(buttonClass, text) {
-  return `<button class="${buttonClass}">${text}</button>`;
-}
-
 function handleSubmitAnswerButtonClicked() {
   //listen for the .submit-answer button click
-  $('.page').on('click', '.submit-answer', function (event) {
+  $('.page').on('submit', 'form', function (event) {
     //prevent the default behavior
     event.preventDefault();
     //check if the handler works
@@ -128,49 +201,6 @@ function handleSubmitAnswerButtonClicked() {
   });
 }
 
-
-//this function returns a string that outlines the STORE.view = 'feedback' page
-function renderFeedbackView(){
-  //this will get the question block
-  const question = generateQuestion(STORE.currentQuestion);
-  //this will get the feedback block
-  const feedback = generateFeedback(STORE.currentQuestion);
-  //this will get a next question button
-  const button = generateButton(STORE.button.class, STORE.button.label);
-  return `
-    ${question} ${feedback} ${button}`;
-}
-
-function getAnswerResults(){
-  //get value for checked radio button and put into generateFeedback
-  const indexUserChoice = $('input[name=\'choice\']:checked').val();
-  console.log('radio value is', indexUserChoice);
-  return indexUserChoice;
-}
-
-//this should generate a string that will be fed into renderFeedbackView
-function generateFeedback(i){
-  console.log('Argument of generateFeedback', i);
-  //this is giving us the value at QUESTIONS[i]
-  const correctAnswer = QUESTIONS[i].correctAnswerIndex; 
-  console.log('correct answer index', correctAnswer);
-  const indexUserChoice = getAnswerResults();
-  console.log('indexUserChoice is', indexUserChoice);
-  let resultMessage; 
-  if(indexUserChoice !== correctAnswer){
-    resultMessage = "You were Wrong!";
-  }
-  if (indexUserChoice == correctAnswer){
-    resultMessage = "You were Correct!";
-    STORE.correctAnswerTotal++;
-  }
-  return `
-    <div class="feedback">
-            <h2 class="answer-feedback" id="user-answer">results: ${resultMessage}</h2>
-            <h2 class="answer-feedback" id="correct-answer">The Correct Answer was: ${QUESTIONS[i].answers[correctAnswer]}</h2>
-        </div>`;
-}
-
 function handleNextQuestion() {
   $('.page').on('click', '.next-question', function(event) {
     STORE.currentQuestion++;
@@ -186,6 +216,13 @@ function handleViewResults() {
   //change button to 'start over'
   //change currentQuestion to null
   //output score and 'congatulations....'
+  $('.page').on('click', '.view-results', function(event) {
+    STORE.view = 'results';
+    STORE.button = {class:'start-over', label: 'Start Over'};
+    STORE.currentQuestion = null;
+    
+    renderPage();
+  });
 }
 
 function handleStartOver() {
@@ -194,29 +231,21 @@ function handleStartOver() {
 }
 
 
-//this will render the page to the DOM based on 
-//our current store state.
-//this will be called each time we need to change the view 
-//of the page
-function renderPage() {
 
-  if (STORE.view === 'start') {
-    $('form').html(renderStartView());
-  }
-  if (STORE.view === 'questions') {
-    console.log('about to render');
-    $('form').html(renderQuestionView());
-  }
-  if (STORE.view === 'feedback') {
-    $('form').html(renderFeedbackView());
-  }
-  // if (STORE.view === 'lastQuestionFeedback') {
-  //   $('form').html(renderlastQuestionFeedbackView());
-  // }
-  if (STORE.view === 'results') {
-    $('form').html(renderResultsView());
-  }
+
+function getAnswerResults(){
+  //get value for checked radio button and put into generateFeedback
+  const indexUserChoice = $('input[name=\'choice\']:checked').val();
+  console.log('radio value is', indexUserChoice);
+  return indexUserChoice;
 }
+
+
+
+
+
+
+
 
 //this is an anonymous function that will run automatically
 //after the whole document is loaded.  that's why it's at the end
