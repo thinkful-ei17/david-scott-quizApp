@@ -89,13 +89,13 @@ function generateQuestion(i){
   //questionText and answers
   return `
     <div class="answer-choice">${index.questionText}</div>
-    <input type="radio" name="choice" value="0" class="choice" id="choice-1">
+    <input type="radio" name="choice" value="0" class="choice" id="choice-1" required>
       <label for="choice-1">${index.answers[0]}</label>
-    <input type="radio" name="choice" value="1" class="choice" id="choice-2">
+    <input type="radio" name="choice" value="1" class="choice" id="choice-2" required>
       <label for="choice-2">${index.answers[1]}</label>
-    <input type="radio" name="choice" value="2" class="choice" id="choice-3">
+    <input type="radio" name="choice" value="2" class="choice" id="choice-3" required>
       <label for="choice-3">${index.answers[2]}</label>
-    <input type="radio" name="choice" value="3" class="choice" id="choice-4">
+    <input type="radio" name="choice" value="3" class="choice" id="choice-4" required>
       <label for="choice-4">${index.answers[3]}</label>      
   </div>
   `;
@@ -153,13 +153,12 @@ function generateFeedback(i){
   const indexUserChoice = getAnswerResults();
   console.log('indexUserChoice is', indexUserChoice);
   let resultMessage; 
-  // if(indexUserChoice !== correctAnswer){
-  //   resultMessage = "You were Wrong!";
-  // }
+  if(indexUserChoice !== correctAnswer){
+    resultMessage = "You were Wrong!";
+  }
   if (indexUserChoice == correctAnswer){
     resultMessage = "You were Correct!";
   }
-  
   return `
     <div class="feedback">
             <h2 class="answer-feedback" id="user-answer">results: ${resultMessage}</h2>
