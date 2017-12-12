@@ -103,20 +103,20 @@ function generateFeedback(i){
 function renderPage() {
   
   if (STORE.view === 'start') {
-    $('form').html(renderStartView());
+    $('.page').html(renderStartView());
   }
   if (STORE.view === 'questions') {
     console.log('about to render');
-    $('form').html(renderQuestionView());
+    $('.page').html(renderQuestionView());
   }
   if (STORE.view === 'feedback' && STORE.showFeedback === true) {
-    $('form').html(renderFeedbackView());
+    $('.page').html(renderFeedbackView());
   }
   // if (STORE.view === 'lastQuestionFeedback') {
   //   $('form').html(renderlastQuestionFeedbackView());
   // }
   if (STORE.view === 'results') {
-    $('form').html(renderResultsView());
+    $('.page').html(renderResultsView());
   }
 }
   
